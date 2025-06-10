@@ -50,12 +50,14 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
   };
 
   try {
+    const abortController = new AbortController();
     const result = await callTRPCProcedure({
       ctx,
       path,
-      procedures: router._def.procedures,
+      router,
       getRawInput: async () => input,
       type,
+      signal: abortController.signal,
     });
 
     if (type !== 'subscription') {

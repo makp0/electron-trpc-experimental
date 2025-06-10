@@ -9,15 +9,15 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@tanstack/react-query": "^4.29.14",
-    "@trpc/client": "10.33.1",
-    "@trpc/react-query": "10.33.1",
-    "@trpc/server": "10.33.1",
+    "@tanstack/react-query": "^5.80.6",
+    "@trpc/client": "11.3.1",
+    "@trpc/react-query": "11.3.1",
+    "@trpc/server": "11.3.1",
     "electron": "29.3.2",
     "electron-trpc": "1.0.0-alpha.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "zod": "^3.21.4"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

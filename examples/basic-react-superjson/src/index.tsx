@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { ipcLink } from 'electron-trpc/renderer';
 import superjson from 'superjson';
 import { createTRPCReact } from '@trpc/react-query';
@@ -12,8 +12,7 @@ function App() {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpcReact.createClient({
-      links: [ipcLink()],
-      transformer: superjson,
+      links: [ipcLink({ transformer: superjson })],
     })
   );
 
@@ -41,4 +40,6 @@ function HelloElectron() {
   return <div>{data.text}</div>;
 }
 
-ReactDom.render(<App />, document.getElementById('react-root'));
+const container = document.getElementById('react-root');
+const root = createRoot(container!);
+root.render(<App />);

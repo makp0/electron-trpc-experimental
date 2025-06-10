@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { ipcLink } from 'electron-trpc/renderer';
 import { createTRPCReact } from '@trpc/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -39,4 +39,6 @@ function HelloElectron() {
   return <div data-testid="greeting">{data.text}</div>;
 }
 
-ReactDom.render(<App />, document.getElementById('react-root'));
+const container = document.getElementById('react-root');
+const root = createRoot(container!);
+root.render(<App />);
