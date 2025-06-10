@@ -1,14 +1,17 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { DOCS_CONFIG } from './src/config.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://electron-trpc.dev',
+  site: DOCS_CONFIG.siteUrl,
+  // Only use base path in production (GitHub Pages)
+  base: process.env.NODE_ENV === 'production' ? DOCS_CONFIG.basePath : undefined,
   integrations: [
     starlight({
-      title: 'electron-trpc',
+      title: DOCS_CONFIG.title,
       social: {
-        github: 'https://github.com/jsonnull/electron-trpc',
+        github: DOCS_CONFIG.repositoryUrl,
       },
     }),
   ],

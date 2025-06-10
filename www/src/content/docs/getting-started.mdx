@@ -1,12 +1,33 @@
 ---
 title: 'Getting Started'
-description: 'How to start using electron-trpc in an Electron app.'
+description: 'How to start using electron-trpc-experimental in an Electron app.'
 ---
 
 import { Code } from '@astrojs/starlight/components';
+import { DOCS_CONFIG } from '../../config.ts';
+
+export const InstallCommand = ({ manager, command }) => (
+  <div className="not-content">
+    <h4>{manager}</h4>
+    <pre className="astro-code github-dark" style={{ backgroundColor: '#24292e', color: '#e1e4e8', overflowX: 'auto', padding: '1rem', borderRadius: '0.375rem' }}>
+      <code>
+        <span style={{ color: '#79b8ff' }}>{command}</span> <span style={{ color: '#9ecbff' }}>add</span> <span style={{ color: '#9ecbff' }}>{DOCS_CONFIG.packageName}</span>
+      </code>
+    </pre>
+  </div>
+);
+
+export const packageName = DOCS_CONFIG.packageName;
+export const trpcDocsUrl = DOCS_CONFIG.externalLinks.trpcDocs;
+export const basicExampleUrl = DOCS_CONFIG.externalLinks.basicExampleUrl;
+export const electronContextIsolationUrl = DOCS_CONFIG.externalLinks.electronContextIsolation;
+export const electronPreloadScriptsUrl = DOCS_CONFIG.externalLinks.electronPreloadScripts;
+export const breakingChangeVersion = DOCS_CONFIG.breakingChangeVersion;
+export const preloadImportPath = DOCS_CONFIG.importPaths.preload;
+export const legacyPreloadImportPath = DOCS_CONFIG.legacyImportPaths.preload;
 
 export const preloadCode = `
-import { exposeElectronTRPC } from 'electron-trpc/main';
+import { exposeElectronTRPC } from '${DOCS_CONFIG.importPaths.preload}';
 
 process.once('loaded', async () => {
 exposeElectronTRPC();
@@ -15,7 +36,7 @@ exposeElectronTRPC();
 
 export const mainCode = `
 import { app } from 'electron';
-import { createIPCHandler } from 'electron-trpc/main';
+import { createIPCHandler } from '${DOCS_CONFIG.importPaths.main}';
 import { router } from './api';
 
 app.on('ready', () => {
@@ -32,7 +53,7 @@ createIPCHandler({ router, windows: [win] });
 
 export const rendererCode = `
 import { createTRPCProxyClient } from '@trpc/client';
-import { ipcLink } from 'electron-trpc/renderer';
+import { ipcLink } from '${DOCS_CONFIG.importPaths.renderer}';
 
 export const client = createTRPCProxyClient({
   links: [ipcLink()],
@@ -41,39 +62,29 @@ export const client = createTRPCProxyClient({
 
 ## Installation
 
-Follow installation instructions for [trpc](https://trpc.io/docs/quickstart#installation) to build your router and client of choice.
+Follow installation instructions for [trpc](https://trpc.io/docs) to build your router and client of choice.
 
-#### pnpm
+<InstallCommand manager="pnpm" command="pnpm" />
 
-```sh
-pnpm add electron-trpc
-```
+<InstallCommand manager="yarn" command="yarn" />
 
-#### yarn
-
-```sh
-yarn add electron-trpc
-```
-
-#### npm
-
-```sh
-npm install --save electron-trpc
-```
+<InstallCommand manager="npm" command="npm install --save" />
 
 #### TypeScript
 
-It's worth noting that you'll need to figure out how to get TypeScript working on both the main process and render process client code. For one example of how to do this with a good developer experience (minimal configuration, fast bundling, client hot-reloading) see our [basic example](https://github.com/jsonnull/electron-trpc/tree/main/examples/basic).
+It's worth noting that you'll need to figure out how to get TypeScript working on both the main process and render process client code. For one example of how to do this with a good developer experience (minimal configuration, fast bundling, client hot-reloading) see our [basic example](https://github.com/makp0/electron-trpc/tree/main/examples/basic-react).
 
 ## Code
 
 ### Preload
 
-`electron-trpc` depends on Electron's [Context Isolation](https://www.electronjs.org/docs/latest/tutorial/context-isolation) feature, and exposes the electron-trpc IPC channel to render processes using a [preload file](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts).
+`electron-trpc-experimental` depends on Electron's [Context Isolation](https://www.electronjs.org/docs/tutorial/context-isolation) feature, and exposes the electron-trpc IPC channel to render processes using a [preload file](https://www.electronjs.org/docs/api/browser-window#new-browserwindowoptions).
 
 Some familiarization with these concepts can be helpful in case of unexpected issues during setup.
 
-This is the most minimal working preload file for using `electron-trpc`. Depending on your application, you may need to add this to an existing preload file or customize it later.
+This is the most minimal working preload file for using `electron-trpc-experimental`. Depending on your application, you may need to add this to an existing preload file or customize it later.
+
+
 
 <Code lang="ts" title="preload.ts" code={preloadCode} />
 
