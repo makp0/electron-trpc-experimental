@@ -10,6 +10,7 @@ const REPO_NAME = repoUrlParts[1];
 const REPO_BASE_URL = repoUrl;
 const SITE_BASE_URL = `https://${REPO_OWNER}.github.io`;
 const BASE_PATH = `/${REPO_NAME}`;
+const PAGES_PATH = `${SITE_BASE_URL}${BASE_PATH}`;
 
 export const DOCS_CONFIG = {
   // Package information
@@ -22,6 +23,7 @@ export const DOCS_CONFIG = {
   // Site information
   siteUrl: SITE_BASE_URL,
   basePath: BASE_PATH,
+  pagesPath: PAGES_PATH,
 
   // Documentation information
   title: packageJson.name,
