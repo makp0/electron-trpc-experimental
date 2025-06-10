@@ -2,20 +2,35 @@
 title: electron-trpc-experimental
 description: Ergonomic and type-safe solution for building IPC in Electron
 template: splash
-hero:
-  tagline: Ergonomic and type-safe solution for building IPC in Electron
-  actions:
-    - text: Getting Started
-      link: /getting-started/
-      icon: right-arrow
-      variant: primary
-    - text: Example Usage
-      link: https://github.com/makp0/electron-trpc/tree/main/examples/
-      icon: external
 ---
 
-import { Card, CardGrid, Code } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 import { DOCS_CONFIG } from '../../config.ts';
+
+<div style={{ textAlign: 'center', padding: '2rem 1rem 3rem', marginBottom: '2rem' }}>
+  <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem' }}>
+    {DOCS_CONFIG.title}
+  </h1>
+  <p style={{ fontSize: '1.25rem', marginBottom: '2rem', opacity: 0.8 }}>
+    Ergonomic and type-safe solution for building IPC in Electron
+  </p>
+  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+    <LinkButton 
+      href={`${DOCS_CONFIG.basePath}/getting-started/`} 
+      variant="primary"
+      icon="right-arrow"
+    >
+      Getting Started
+    </LinkButton>
+    <LinkButton 
+      href={DOCS_CONFIG.externalLinks.examplesUrl} 
+      variant="secondary"
+      icon="external"
+    >
+      Example Usage
+    </LinkButton>
+  </div>
+</div>
 
 <CardGrid>
   <Card title="Main <-> Renderer" icon="random">
@@ -31,11 +46,3 @@ import { DOCS_CONFIG } from '../../config.ts';
     Supports all tRPC features. No need to write complicated bi-directional IPC schemes.
   </Card>
 </CardGrid>
-
-<div style="display: none;">
-  {/* Using config values - these will be used when we convert frontmatter to use variables */}
-  {DOCS_CONFIG.title}
-  {DOCS_CONFIG.description}
-  {DOCS_CONFIG.tagline}
-  {DOCS_CONFIG.externalLinks.examplesUrl}
-</div>

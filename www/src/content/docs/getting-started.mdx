@@ -33,9 +33,7 @@ export const trpcDocsUrl = DOCS_CONFIG.externalLinks.trpcDocs;
 export const basicExampleUrl = DOCS_CONFIG.externalLinks.basicExampleUrl;
 export const electronContextIsolationUrl = DOCS_CONFIG.externalLinks.electronContextIsolation;
 export const electronPreloadScriptsUrl = DOCS_CONFIG.externalLinks.electronPreloadScripts;
-export const breakingChangeVersion = DOCS_CONFIG.breakingChangeVersion;
 export const preloadImportPath = DOCS_CONFIG.importPaths.preload;
-export const legacyPreloadImportPath = DOCS_CONFIG.legacyImportPaths.preload;
 
 export const preloadCode = `
 import { exposeElectronTRPC } from '${DOCS_CONFIG.importPaths.preload}';
@@ -45,8 +43,7 @@ exposeElectronTRPC();
 });
 `.trim();
 
-export const mainCode = `
-import { app } from 'electron';
+export const mainCode = `import { app } from 'electron';
 import { createIPCHandler } from '${DOCS_CONFIG.importPaths.main}';
 import { router } from './api';
 
@@ -54,13 +51,12 @@ app.on('ready', () => {
 const win = new BrowserWindow({
 webPreferences: {
 // Replace this path with the path to your BUILT preload file
-preload: 'path/to/preload.js',
+"preload": 'path/to/preload.js',
 },
 });
 
 createIPCHandler({ router, windows: [win] });
-});
-`.trim();
+});`;
 
 export const rendererCode = `
 import { createTRPCProxyClient } from '@trpc/client';
