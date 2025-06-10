@@ -3,13 +3,13 @@ import { EventEmitter, on } from 'events';
 import * as trpc from '@trpc/server';
 import { observable } from '@trpc/server/observable';
 import { IpcMainEvent } from 'electron';
-import { describe, expect, MockedFunction, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { handleIPCMessage } from '../handleIPCMessage';
 
 interface MockEvent {
-  reply: MockedFunction<any>;
+  reply: ReturnType<typeof vi.fn>;
   sender: {
     isDestroyed: () => boolean;
     on: (event: string, cb: () => void) => void;

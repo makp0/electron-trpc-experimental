@@ -1,7 +1,7 @@
 import {
   callTRPCProcedure,
   TRPCError,
-  getErrorShape,
+  getTRPCErrorShape,
   getTRPCErrorFromUnknown,
   isTrackedEnvelope,
 } from '@trpc/server';
@@ -110,84 +110,89 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
       : result;
 
     run(async () => {
-      await using iterator = iteratorResource(iterable);
+      const iterator = iteratorResource(iterable);
 
-      const abortPromise = new Promise<'abort'>(resolve => {
-        abortController.signal.onabort = () => resolve('abort');
-      });
-      // We need those declarations outside the loop for garbage collection reasons. If they
-      // were declared inside, they would not be freed until the next value is present.
-      let next:
-        | null
-        | TRPCError
-        | Awaited<typeof abortPromise | ReturnType<(typeof iterator)['next']>>;
-      let result: null | TRPCResultMessage<unknown>['result'];
+      try {
+        const abortPromise = new Promise<'abort'>(resolve => {
+          abortController.signal.onabort = () => resolve('abort');
+        });
+        // We need those declarations outside the loop for garbage collection reasons. If they
+        // were declared inside, they would not be freed until the next value is present.
+        let next:
+          | null
+          | TRPCError
+          | Awaited<typeof abortPromise | ReturnType<(typeof iterator)['next']>>;
+        let result: null | TRPCResultMessage<unknown>['result'];
 
-      while (true) {
-        next = await Unpromise.race([
-          iterator.next().catch(getTRPCErrorFromUnknown),
-          abortPromise,
-        ]);
+        while (true) {
+          next = await Unpromise.race([
+            iterator.next().catch(getTRPCErrorFromUnknown),
+            abortPromise,
+          ]);
 
-        if (next === 'abort') {
-          await iterator.return?.();
-          break;
-        }
-        if (next instanceof Error) {
-          const error = getTRPCErrorFromUnknown(next);
+          if (next === 'abort') {
+            await iterator.return?.();
+            break;
+          }
+          if (next instanceof Error) {
+            const error = getTRPCErrorFromUnknown(next);
+            respond({
+              id,
+              error: getTRPCErrorShape({
+                config: router._def._config,
+                error,
+                type,
+                path,
+                input,
+                ctx,
+              }),
+            });
+            break;
+          }
+          if (next.done) {
+            break;
+          }
+
+          result = {
+            type: 'data',
+            data: next.value,
+          };
+
+          if (isTrackedEnvelope(next.value)) {
+            const [id, data] = next.value;
+            result.id = id;
+            result.data = {
+              id,
+              data,
+            };
+          }
+
           respond({
             id,
-            error: getErrorShape({
-              config: router._def._config,
-              error,
-              type,
-              path,
-              input,
-              ctx,
-            }),
+            result,
           });
-          break;
-        }
-        if (next.done) {
-          break;
-        }
 
-        result = {
-          type: 'data',
-          data: next.value,
-        };
-
-        if (isTrackedEnvelope(next.value)) {
-          const [id, data] = next.value;
-          result.id = id;
-          result.data = {
-            id,
-            data,
-          };
+          // free up references for garbage collection
+          next = null;
+          result = null;
         }
 
         respond({
           id,
-          result,
+          result: {
+            type: 'stopped',
+          },
         });
-
-        // free up references for garbage collection
-        next = null;
-        result = null;
+        subscriptions.delete(internalId);
+      } finally {
+        // Manually dispose of the iterator resource
+        await iterator[Symbol.asyncDispose]();
       }
-
-      respond({
-        id,
-        result: {
-          type: 'stopped',
-        },
-      });
-      subscriptions.delete(internalId);
     }).catch(cause => {
       const error = getTRPCErrorFromUnknown(cause);
       respond({
         id,
-        error: getErrorShape({
+        error: getTRPCErrorShape({
           config: router._def._config,
           error,
           type,
@@ -212,7 +217,7 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
 
     return respond({
       id,
-      error: getErrorShape({
+      error: getTRPCErrorShape({
         config: router._def._config,
         error,
         type,
