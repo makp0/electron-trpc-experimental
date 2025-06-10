@@ -9,9 +9,20 @@ import { DOCS_CONFIG } from '../../config.ts';
 export const InstallCommand = ({ manager, command }) => (
   <div className="not-content">
     <h4>{manager}</h4>
-    <pre className="astro-code github-dark" style={{ backgroundColor: '#24292e', color: '#e1e4e8', overflowX: 'auto', padding: '1rem', borderRadius: '0.375rem' }}>
+    <pre
+      className="astro-code github-dark"
+      style={{
+        backgroundColor: '#24292e',
+        color: '#e1e4e8',
+        overflowX: 'auto',
+        padding: '1rem',
+        borderRadius: '0.375rem',
+      }}
+    >
       <code>
-        <span style={{ color: '#79b8ff' }}>{command}</span> <span style={{ color: '#9ecbff' }}>add</span> <span style={{ color: '#9ecbff' }}>{DOCS_CONFIG.packageName}</span>
+        <span style={{ color: '#79b8ff' }}>{command}</span>{' '}
+        <span style={{ color: '#9ecbff' }}>add</span>{' '}
+        <span style={{ color: '#9ecbff' }}>{DOCS_CONFIG.packageName}</span>
       </code>
     </pre>
   </div>
@@ -65,9 +76,9 @@ import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { z } from 'zod';
 
-const t = initTRPC.create({ 
-  isServer: true, 
-  transformer: superjson 
+const t = initTRPC.create({
+isServer: true,
+transformer: superjson
 });
 
 export const router = t.router({
@@ -116,8 +127,6 @@ Some familiarization with these concepts can be helpful in case of unexpected is
 
 This is the most minimal working preload file for using `electron-trpc-experimental`. Depending on your application, you may need to add this to an existing preload file or customize it later.
 
-
-
 <Code lang="ts" title="preload.ts" code={preloadCode} />
 
 ### Main
@@ -146,7 +155,7 @@ First, install a transformer library like `superjson`:
 # pnpm
 pnpm add superjson
 
-# yarn  
+# yarn
 yarn add superjson
 
 # npm

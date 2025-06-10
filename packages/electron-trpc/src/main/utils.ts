@@ -2,15 +2,10 @@ export function isObject(value: unknown): value is Record<string, unknown> {
   return !!value && !Array.isArray(value) && typeof value === 'object';
 }
 
-const asyncIteratorsSupported =
-  typeof Symbol === 'function' && !!Symbol.asyncIterator;
+const asyncIteratorsSupported = typeof Symbol === 'function' && !!Symbol.asyncIterator;
 
-export function isAsyncIterable<TValue>(
-  value: unknown
-): value is AsyncIterable<TValue> {
-  return (
-    asyncIteratorsSupported && isObject(value) && Symbol.asyncIterator in value
-  );
+export function isAsyncIterable<TValue>(value: unknown): value is AsyncIterable<TValue> {
+  return asyncIteratorsSupported && isObject(value) && Symbol.asyncIterator in value;
 }
 
 /**
@@ -20,10 +15,7 @@ export function isAsyncIterable<TValue>(
  * @param dispose Async function to call when disposing the resource
  * @returns The original value with Symbol.asyncDispose method added
  */
-export function makeAsyncResource<T>(
-  thing: T,
-  dispose: () => Promise<void>
-): T & AsyncDisposable {
+export function makeAsyncResource<T>(thing: T, dispose: () => Promise<void>): T & AsyncDisposable {
   const it = thing as T & AsyncDisposable;
 
   // eslint-disable-next-line no-restricted-syntax

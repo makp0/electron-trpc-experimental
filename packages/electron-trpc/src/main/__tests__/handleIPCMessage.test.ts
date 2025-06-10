@@ -15,8 +15,7 @@ interface MockEvent {
     on: (event: string, cb: () => void) => void;
   };
 }
-const makeEvent = (event: MockEvent) =>
-  event as unknown as IpcMainEvent & Pick<MockEvent, 'reply'>;
+const makeEvent = (event: MockEvent) => event as unknown as IpcMainEvent & Pick<MockEvent, 'reply'>;
 
 const t = trpc.initTRPC.create();
 const testRouter = t.router({
@@ -24,7 +23,7 @@ const testRouter = t.router({
     .input(
       z.object({
         id: z.string(),
-      }),
+      })
     )
     .query(({ input }) => {
       return { id: input.id, isTest: true };
@@ -109,7 +108,7 @@ describe('api', () => {
     const t = trpc.initTRPC.create();
     const testRouter = t.router({
       testSubscription: t.procedure.subscription(() => {
-        return observable(emit => {
+        return observable((emit) => {
           function testResponse() {
             emit.next('test response');
           }
@@ -297,7 +296,7 @@ describe('api', () => {
           const serialized = (input as string).replace(/^serialized:/, '');
           return JSON.parse(serialized);
         },
-        serialize: input => {
+        serialize: (input) => {
           return `serialized:${JSON.stringify(input)}`;
         },
       },
@@ -305,7 +304,7 @@ describe('api', () => {
 
     const testRouter = t.router({
       testSubscription: t.procedure.subscription(() => {
-        return observable(emit => {
+        return observable((emit) => {
           function testResponse() {
             emit.next('test response');
           }

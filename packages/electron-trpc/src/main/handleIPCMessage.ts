@@ -8,10 +8,7 @@ import {
 import type { AnyTRPCRouter, inferRouterContext } from '@trpc/server';
 import type { TRPCResponseMessage, TRPCResultMessage } from '@trpc/server/rpc';
 import type { IpcMainEvent } from 'electron';
-import {
-  isObservable,
-  observableToAsyncIterable,
-} from '@trpc/server/observable';
+import { isObservable, observableToAsyncIterable } from '@trpc/server/observable';
 import { transformTRPCResponse } from '@trpc/server';
 import { Unpromise } from '@watchable/unpromise';
 import { CreateContextOptions } from './types';
@@ -52,10 +49,7 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
 
   const respond = (response: TRPCResponseMessage) => {
     if (event.sender.isDestroyed()) return;
-    event.reply(
-      ELECTRON_TRPC_CHANNEL,
-      transformTRPCResponse(router._def._config, response),
-    );
+    event.reply(ELECTRON_TRPC_CHANNEL, transformTRPCResponse(router._def._config, response));
   };
 
   try {
@@ -113,7 +107,7 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
       const iterator = iteratorResource(iterable);
 
       try {
-        const abortPromise = new Promise<'abort'>(resolve => {
+        const abortPromise = new Promise<'abort'>((resolve) => {
           abortController.signal.onabort = () => resolve('abort');
         });
         // We need those declarations outside the loop for garbage collection reasons. If they
@@ -188,7 +182,7 @@ export async function handleIPCMessage<TRouter extends AnyTRPCRouter>({
         // Manually dispose of the iterator resource
         await iterator[Symbol.asyncDispose]();
       }
-    }).catch(cause => {
+    }).catch((cause) => {
       const error = getTRPCErrorFromUnknown(cause);
       respond({
         id,

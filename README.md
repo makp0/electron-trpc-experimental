@@ -27,7 +27,7 @@
 This is a fork of [electron-trpc](https://github.com/jsonnull/electron-trpc) by [@jsonnull](https://github.com/jsonnull) with significant contributions from [@mat-sz](https://github.com/mat-sz). This version includes:
 
 - **Component Separation**: Split into distinct `main`, `preload`, and `renderer` components for better organization
-- **tRPC v11 Support**: Updated to support the latest tRPC v11 features and improvements  
+- **tRPC v11 Support**: Updated to support the latest tRPC v11 features and improvements
 - **Async Generators**: Full support for async generators enabling real-time streaming data
 - **Modern Architecture**: Enhanced separation of concerns following Electron's security model
 
@@ -60,5 +60,3 @@ npm install electron-trpc-experimental
 - **Async Generators** - Support for streaming data and real-time updates
 - **Transformers** - Use SuperJSON and other transformers for complex data types
 - **Security-first** - Built on Electron's context isolation for secure IPC
-
-

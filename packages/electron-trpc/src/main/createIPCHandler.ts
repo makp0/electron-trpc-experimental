@@ -56,12 +56,10 @@ class IPCHandler<TRouter extends AnyTRPCRouter> {
   }
 
   detachWindow(win: BrowserWindow, webContentsId?: number) {
-    this.#windows = this.#windows.filter(w => w !== win);
+    this.#windows = this.#windows.filter((w) => w !== win);
 
     if (win.isDestroyed() && webContentsId === undefined) {
-      throw new Error(
-        'webContentsId is required when calling detachWindow on a destroyed window',
-      );
+      throw new Error('webContentsId is required when calling detachWindow on a destroyed window');
     }
 
     this.#cleanUpSubscriptions({
@@ -105,9 +103,7 @@ export const createIPCHandler = <TRouter extends AnyTRPCRouter>({
   router,
   windows = [],
 }: {
-  createContext?: (
-    opts: CreateContextOptions,
-  ) => Promise<inferRouterContext<TRouter>>;
+  createContext?: (opts: CreateContextOptions) => Promise<inferRouterContext<TRouter>>;
   router: TRouter;
   windows?: Electron.BrowserWindow[];
 }) => {
