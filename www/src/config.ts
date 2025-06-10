@@ -1,39 +1,39 @@
-// Base configuration values
-const PACKAGE_NAME = 'electron-trpc-experimental';
-const REPO_OWNER = 'makp0';
-const REPO_NAME = 'electron-trpc-experimental';
-const CURRENT_VERSION = '1.0.0-alpha.0';
+import packageJson from '../../packages/electron-trpc/package.json';
 
-// Computed values
-const REPO_BASE_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
+// Extract repository information from package.json
+const repoUrl = packageJson.repository.url.replace('.git', '').replace('git+', '');
+const repoUrlParts = repoUrl.replace('https://github.com/', '').split('/');
+const REPO_OWNER = repoUrlParts[0];
+const REPO_NAME = repoUrlParts[1];
+
+// Computed values from package.json
+const REPO_BASE_URL = repoUrl;
 const SITE_BASE_URL = `https://${REPO_OWNER}.github.io`;
 const BASE_PATH = `/${REPO_NAME}`;
 
 export const DOCS_CONFIG = {
   // Package information
-  packageName: PACKAGE_NAME,
-  originalPackageName: 'electron-trpc',
+  packageName: packageJson.name,
+  homepage: packageJson.homepage,
 
   // Repository information
   repositoryUrl: REPO_BASE_URL,
-  repositoryOwner: REPO_OWNER,
-  repositoryName: REPO_NAME,
 
   // Site information
   siteUrl: SITE_BASE_URL,
   basePath: BASE_PATH,
 
   // Documentation information
-  title: PACKAGE_NAME,
+  title: packageJson.name,
 
   // Version information
-  currentVersion: CURRENT_VERSION,
+  currentVersion: packageJson.version,
 
   // Import paths
   importPaths: {
-    main: `${PACKAGE_NAME}/main`,
-    preload: `${PACKAGE_NAME}/preload`,
-    renderer: `${PACKAGE_NAME}/renderer`,
+    main: `${packageJson.name}/main`,
+    preload: `${packageJson.name}/preload`,
+    renderer: `${packageJson.name}/renderer`,
   },
 
   // External links

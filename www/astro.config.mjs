@@ -9,7 +9,7 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? DOCS_CONFIG.basePath : undefined,
   integrations: [
     starlight({
-      title: DOCS_CONFIG.title,
+      title: `${DOCS_CONFIG.title} v${DOCS_CONFIG.currentVersion}`,
       social: [
         {
           label: 'GitHub',
