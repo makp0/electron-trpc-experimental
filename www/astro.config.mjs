@@ -10,9 +10,13 @@ export default defineConfig({
   integrations: [
     starlight({
       title: DOCS_CONFIG.title,
-      social: {
-        github: DOCS_CONFIG.repositoryUrl,
-      },
+      social: [
+        {
+          label: 'GitHub',
+          icon: 'github',
+          href: DOCS_CONFIG.repositoryUrl,
+        },
+      ],
     }),
   ],
 });

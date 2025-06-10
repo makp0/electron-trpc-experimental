@@ -60,6 +60,38 @@ export const client = createTRPCProxyClient({
 });
 `.trim();
 
+export const routerWithTransformerCode = `
+import { initTRPC } from '@trpc/server';
+import superjson from 'superjson';
+import { z } from 'zod';
+
+const t = initTRPC.create({ 
+  isServer: true, 
+  transformer: superjson 
+});
+
+export const router = t.router({
+  greeting: t.procedure
+    .input(z.object({ name: z.string() }))
+    .query((req) => {
+      return {
+        text: \`Hello \${req.input.name}\`,
+        timestamp: new Date(), // Date objects require transformation
+      };
+    }),
+});
+`.trim();
+
+export const rendererWithTransformerCode = `
+import { createTRPCProxyClient } from '@trpc/client';
+import { ipcLink } from '${DOCS_CONFIG.importPaths.renderer}';
+import superjson from 'superjson';
+
+export const client = createTRPCProxyClient({
+  links: [ipcLink({ transformer: superjson })],
+});
+`.trim();
+
 ## Installation
 
 Follow installation instructions for [trpc](https://trpc.io/docs) to build your router and client of choice.
@@ -101,3 +133,42 @@ Windows you construct with the preload file and the IPC handler can reach the tR
 <Code lang="ts" title="renderer.ts" code={rendererCode} />
 
 To use a different client, follow the appropriate usage instructions in the tRPC docs, ensuring that you substitute any HTTP or websocket links with the `ipcLink`.
+
+## Using Transformers
+
+Transformers in tRPC allow you to serialize and deserialize data that can't be directly transferred over JSON, such as `Date` objects, `Map`, `Set`, `BigInt`, etc. When using transformers with `electron-trpc-experimental`, you need to configure them on both the server (main process) and client (renderer process).
+
+### Install a transformer
+
+First, install a transformer library like `superjson`:
+
+```bash
+# pnpm
+pnpm add superjson
+
+# yarn  
+yarn add superjson
+
+# npm
+npm install --save superjson
+```
+
+### Configure the router (Main Process)
+
+Configure your tRPC router to use the transformer:
+
+<Code lang="ts" title="api.ts" code={routerWithTransformerCode} mark={[2, 3, 5, 6, 7]} />
+
+### Configure the client (Renderer Process)
+
+Configure your tRPC client to use the same transformer:
+
+<Code lang="ts" title="renderer.ts" code={rendererWithTransformerCode} mark={[3, 6]} />
+
+### Important Notes
+
+- **Keep transformers in sync**: The transformer used on the server (main process) must match the transformer used on the client (renderer process).
+- **Popular transformers**: [`superjson`](https://github.com/blitz-js/superjson) is a popular choice that supports Dates, RegExp, Map, Set, BigInt, and more.
+- **Custom transformers**: You can also create custom transformers following the [tRPC transformer documentation](https://trpc.io/docs/data-transformers).
+
+For a complete working example with transformers, see our [superjson example](https://github.com/makp0/electron-trpc-experimental/tree/main/examples/basic-react-superjson).
