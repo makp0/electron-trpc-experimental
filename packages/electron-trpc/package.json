@@ -4,11 +4,11 @@
   "version": "1.0.0-alpha.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/makp0/electron-trpc.git"
+    "url": "https://github.com/makp0/electron-trpc-experimental.git"
   },
-  "homepage": "https://electron-trpc.dev",
+  "homepage": "https://makp0.github.io/electron-trpc-experimental/",
   "bugs": {
-    "url": "https://github.com/makp0/electron-trpc/issues"
+    "url": "https://github.com/makp0/electron-trpc-experimental/issues"
   },
   "keywords": [
     "electron",
