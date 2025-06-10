@@ -43,7 +43,5 @@ jobs:
       - run: pnpm build:code
       - run: |
           sudo chown root examples/basic-react/node_modules/electron/dist/chrome-sandbox \
-          && sudo chmod 4755 examples/basic-react/node_modules/electron/dist/chrome-sandbox \
-          && sudo chown root examples/basic-vanilla-esm/node_modules/electron/dist/chrome-sandbox \
-          && sudo chmod 4755 examples/basic-vanilla-esm/node_modules/electron/dist/chrome-sandbox
+          && sudo chmod 4755 examples/basic-react/node_modules/electron/dist/chrome-sandbox
       - run: xvfb-run --auto-servernum -- pnpm test:e2e
