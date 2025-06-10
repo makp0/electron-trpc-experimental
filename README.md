@@ -51,7 +51,6 @@ npm install electron-trpc-experimental
 
 - [Getting Started](https://makp0.github.io/electron-trpc-experimental/getting-started/) - Setup guide and basic usage
 - [Examples](./examples/) - Working examples with different configurations
-- [API Reference](https://makp0.github.io/electron-trpc-experimental/) - Complete API documentation
 
 ## Features
 
