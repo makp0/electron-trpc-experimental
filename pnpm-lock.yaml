@@ -41,9 +41,9 @@ importers:
       electron:
         specifier: 29.3.2
         version: 29.3.2
-      electron-trpc:
+      electron-trpc-experimental:
         specifier: 1.0.0-alpha.0
-        version: 1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2)
+        version: link:../../packages/electron-trpc
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -90,9 +90,9 @@ importers:
       electron:
         specifier: 29.3.2
         version: 29.3.2
-      electron-trpc:
+      electron-trpc-experimental:
         specifier: 1.0.0-alpha.0
-        version: 1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2)
+        version: link:../../packages/electron-trpc
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -2238,13 +2238,6 @@ packages:
 
   electron-to-chromium@1.4.756:
     resolution: {integrity: sha512-RJKZ9+vEBMeiPAvKNWyZjuYyUqMndcP1f335oHqn3BEQbs2NFtVrnK5+6Xg5wSM9TknNNpWghGDUCKGYF+xWXw==}
-
-  electron-trpc@1.0.0-alpha.0:
-    resolution: {integrity: sha512-wNx4hSJNUTADmRSdW+v4lajH4jl0M4gybzvvJrSI9eCU3OshXq5qoPJwHh/xxjosmEFTzYmgkuWEB2We9xkgqg==}
-    peerDependencies:
-      '@trpc/client': '>10.0.0'
-      '@trpc/server': '>10.0.0'
-      electron: '>19.0.0'
 
   electron@29.3.2:
     resolution: {integrity: sha512-pRWsaFtbd78kEHR0lg5aMhZDY6b5JykIEhZRtyTCaJpGFObB2NFIJDzR7mTia0cZp3pPq60n/SS4gRxvSM5WFQ==}
@@ -6729,15 +6722,6 @@ snapshots:
   eastasianwidth@0.2.0: {}
 
   electron-to-chromium@1.4.756: {}
-
-  electron-trpc@1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2):
-    dependencies:
-      '@trpc/client': 11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3)
-      '@trpc/server': 11.3.1(typescript@5.8.3)
-      debug: 4.4.1
-      electron: 29.3.2
-    transitivePeerDependencies:
-      - supports-color
 
   electron@29.3.2:
     dependencies:
