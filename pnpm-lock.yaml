@@ -43,7 +43,7 @@ importers:
         version: 29.3.2
       electron-trpc:
         specifier: 1.0.0-alpha.0
-        version: link:../../packages/electron-trpc
+        version: 1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -92,7 +92,7 @@ importers:
         version: 29.3.2
       electron-trpc:
         specifier: 1.0.0-alpha.0
-        version: link:../../packages/electron-trpc
+        version: 1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -124,31 +124,6 @@ importers:
       vite-plugin-electron:
         specifier: ^0.28.7
         version: 0.28.7
-
-  examples/basic-vanilla-esm:
-    dependencies:
-      '@trpc/client':
-        specifier: 10.33.1
-        version: 10.33.1(@trpc/server@10.33.1)
-      '@trpc/server':
-        specifier: 10.33.1
-        version: 10.33.1
-      electron:
-        specifier: 29.3.2
-        version: 29.3.2
-      electron-trpc:
-        specifier: 0.6.1
-        version: 0.6.1(@trpc/client@10.33.1(@trpc/server@10.33.1))(@trpc/server@10.33.1)(electron@29.3.2)
-      vite:
-        specifier: ^5.2.11
-        version: 5.2.11(@types/node@20.12.8)
-      zod:
-        specifier: ^3.21.4
-        version: 3.23.8
-    devDependencies:
-      '@types/node':
-        specifier: ^20.12.8
-        version: 20.12.8
 
   packages/electron-trpc:
     dependencies:
@@ -1548,11 +1523,6 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@trpc/client@10.33.1':
-    resolution: {integrity: sha512-j1YKBl/VtjCK3nUQFacsouGpsk/DFVNiekp4sZf8Lryb6f1OIChlLJZNEipl+DUuHxsPVuaCQis4PGkrIb2ieg==}
-    peerDependencies:
-      '@trpc/server': 10.33.1
-
   '@trpc/client@11.3.1':
     resolution: {integrity: sha512-UlLsUN7x8qD07FaGzdz/FG3K+kpaYowZkmVZ8R4Nlx1Yj01Kgr1Y+cGjtBdRpd+0l7uVylwDPmHA1OxYE6zHgA==}
     peerDependencies:
@@ -1568,9 +1538,6 @@ packages:
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
-
-  '@trpc/server@10.33.1':
-    resolution: {integrity: sha512-ObMzyEALXhQ7QTVQdSJ+IL1wYB7UdLLoIhqHraYzqKb9sTTsL3+U64kK084KPsRd4b8R3yH/bzBOnCn8Hbrxkw==}
 
   '@trpc/server@11.3.1':
     resolution: {integrity: sha512-5Rjigjqwl9ieXL91ebZ1M4FPFXQJ5qipRyZuBoNzvqkq7Qlig+2F4WwLELyiTSNk2bGzdJTXJMKLhRE9Z56D8w==}
@@ -2158,15 +2125,6 @@ packages:
   dataloader@1.4.0:
     resolution: {integrity: sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==}
 
-  debug@4.3.4:
-    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
     engines: {node: '>=6.0'}
@@ -2281,8 +2239,8 @@ packages:
   electron-to-chromium@1.4.756:
     resolution: {integrity: sha512-RJKZ9+vEBMeiPAvKNWyZjuYyUqMndcP1f335oHqn3BEQbs2NFtVrnK5+6Xg5wSM9TknNNpWghGDUCKGYF+xWXw==}
 
-  electron-trpc@0.6.1:
-    resolution: {integrity: sha512-Yj13UrjjjOW4+TD06YunAML2tgmtSYJMiFw6E6r1D4in/0EZ2MRwMoQc7AtMPAA6In23e+Kmq71e8h0ir+c3Jg==}
+  electron-trpc@1.0.0-alpha.0:
+    resolution: {integrity: sha512-wNx4hSJNUTADmRSdW+v4lajH4jl0M4gybzvvJrSI9eCU3OshXq5qoPJwHh/xxjosmEFTzYmgkuWEB2We9xkgqg==}
     peerDependencies:
       '@trpc/client': '>10.0.0'
       '@trpc/server': '>10.0.0'
@@ -3339,9 +3297,6 @@ packages:
   mrmime@2.0.0:
     resolution: {integrity: sha512-eu38+hdgojoyq63s+yTpN4XMBdt5l8HhMhc4VKLO9KM5caLIBvUm4thi7fFaxyTmCKeNnXZ5pAlBwCUnhA09uw==}
     engines: {node: '>=10'}
-
-  ms@2.1.2:
-    resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -4743,9 +4698,6 @@ packages:
     peerDependencies:
       zod: ^3.23.3
 
-  zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
-
   zod@3.25.57:
     resolution: {integrity: sha512-6tgzLuwVST5oLUxXTmBqoinKMd3JeesgbgseXeFasKKj8Q1FCZrHnbqJOyiEvr4cVAlbug+CgIsmJ8cl/pU5FA==}
 
@@ -5926,10 +5878,6 @@ snapshots:
       '@tanstack/query-core': 5.80.6
       react: 18.3.1
 
-  '@trpc/client@10.33.1(@trpc/server@10.33.1)':
-    dependencies:
-      '@trpc/server': 10.33.1
-
   '@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
       '@trpc/server': 11.3.1(typescript@5.8.3)
@@ -5943,8 +5891,6 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       typescript: 5.8.3
-
-  '@trpc/server@10.33.1': {}
 
   '@trpc/server@11.3.1(typescript@5.8.3)':
     dependencies:
@@ -6691,10 +6637,6 @@ snapshots:
 
   dataloader@1.4.0: {}
 
-  debug@4.3.4:
-    dependencies:
-      ms: 2.1.2
-
   debug@4.4.1:
     dependencies:
       ms: 2.1.3
@@ -6788,11 +6730,11 @@ snapshots:
 
   electron-to-chromium@1.4.756: {}
 
-  electron-trpc@0.6.1(@trpc/client@10.33.1(@trpc/server@10.33.1))(@trpc/server@10.33.1)(electron@29.3.2):
+  electron-trpc@1.0.0-alpha.0(@trpc/client@11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.3.1(typescript@5.8.3))(electron@29.3.2):
     dependencies:
-      '@trpc/client': 10.33.1(@trpc/server@10.33.1)
-      '@trpc/server': 10.33.1
-      debug: 4.3.4
+      '@trpc/client': 11.3.1(@trpc/server@11.3.1(typescript@5.8.3))(typescript@5.8.3)
+      '@trpc/server': 11.3.1(typescript@5.8.3)
+      debug: 4.4.1
       electron: 29.3.2
     transitivePeerDependencies:
       - supports-color
@@ -8390,8 +8332,6 @@ snapshots:
       ufo: 1.5.3
 
   mrmime@2.0.0: {}
-
-  ms@2.1.2: {}
 
   ms@2.1.3: {}
 
@@ -10022,8 +9962,6 @@ snapshots:
   zod-to-json-schema@3.23.0(zod@3.25.57):
     dependencies:
       zod: 3.25.57
-
-  zod@3.23.8: {}
 
   zod@3.25.57: {}
 
