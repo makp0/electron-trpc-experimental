@@ -1,10 +1,12 @@
-import { describe, expect, MockedFunction, test, vi } from 'vitest';
-import { z } from 'zod';
+import { EventEmitter, on } from 'events';
+
 import * as trpc from '@trpc/server';
 import { observable } from '@trpc/server/observable';
-import { EventEmitter } from 'events';
-import { handleIPCMessage } from '../handleIPCMessage';
 import { IpcMainEvent } from 'electron';
+import { describe, expect, MockedFunction, test, vi } from 'vitest';
+import { z } from 'zod';
+
+import { handleIPCMessage } from '../handleIPCMessage';
 
 interface MockEvent {
   reply: MockedFunction<any>;
@@ -13,9 +15,8 @@ interface MockEvent {
     on: (event: string, cb: () => void) => void;
   };
 }
-const makeEvent = (event: MockEvent) => event as unknown as IpcMainEvent & Pick<MockEvent, 'reply'>;
-
-const ee = new EventEmitter();
+const makeEvent = (event: MockEvent) =>
+  event as unknown as IpcMainEvent & Pick<MockEvent, 'reply'>;
 
 const t = trpc.initTRPC.create();
 const testRouter = t.router({
@@ -23,21 +24,11 @@ const testRouter = t.router({
     .input(
       z.object({
         id: z.string(),
-      })
+      }),
     )
     .query(({ input }) => {
       return { id: input.id, isTest: true };
     }),
-  testSubscription: t.procedure.subscription(() => {
-    return observable((emit) => {
-      function testResponse() {
-        emit.next('test response');
-      }
-
-      ee.on('test', testResponse);
-      return () => ee.off('test', testResponse);
-    });
-  }),
 });
 
 describe('api', () => {
@@ -62,6 +53,7 @@ describe('api', () => {
           input: { id: 'test-id' },
           path: 'testQuery',
           type: 'query',
+          signal: undefined,
         },
       },
       router: testRouter,
@@ -101,6 +93,7 @@ describe('api', () => {
           input: { id: 'test-id' },
           path: 'testQuery',
           type: 'query',
+          signal: undefined,
         },
       },
       router: testRouter,
@@ -110,7 +103,23 @@ describe('api', () => {
     expect(event.reply).not.toHaveBeenCalled();
   });
 
-  test('handles subscriptions', async () => {
+  test('handles subscriptions using observables', async () => {
+    const subscriptions = new Map();
+    const ee = new EventEmitter();
+    const t = trpc.initTRPC.create();
+    const testRouter = t.router({
+      testSubscription: t.procedure.subscription(() => {
+        return observable(emit => {
+          function testResponse() {
+            emit.next('test response');
+          }
+
+          ee.on('test', testResponse);
+          return () => ee.off('test', testResponse);
+        });
+      }),
+    });
+
     const event = makeEvent({
       reply: vi.fn(),
       sender: {
@@ -118,6 +127,8 @@ describe('api', () => {
         on: () => {},
       },
     });
+
+    expect(ee.listenerCount('test')).toBe(0);
 
     await handleIPCMessage({
       createContext: async () => ({}),
@@ -129,24 +140,143 @@ describe('api', () => {
           input: undefined,
           path: 'testSubscription',
           type: 'subscription',
+          signal: undefined,
         },
       },
       internalId: '1-1:1',
-      subscriptions: new Map(),
+      subscriptions,
       router: testRouter,
       event,
     });
 
-    expect(event.reply).not.toHaveBeenCalled();
-
-    ee.emit('test');
-
-    expect(event.reply).toHaveBeenCalledOnce();
+    expect(ee.listenerCount('test')).toBe(1);
+    expect(event.reply).toHaveBeenCalledTimes(1);
     expect(event.reply.mock.lastCall![1]).toMatchObject({
       id: 1,
       result: {
-        data: 'test response',
+        type: 'started',
       },
+    });
+
+    ee.emit('test');
+
+    await vi.waitFor(() => {
+      expect(event.reply).toHaveBeenCalledTimes(2);
+      expect(event.reply.mock.lastCall![1]).toMatchObject({
+        id: 1,
+        result: {
+          data: 'test response',
+        },
+      });
+    });
+
+    await handleIPCMessage({
+      createContext: async () => ({}),
+      message: {
+        method: 'subscription.stop',
+        id: 1,
+      },
+      internalId: '1-1:1',
+      subscriptions,
+      router: testRouter,
+      event,
+    });
+
+    await vi.waitFor(() => {
+      expect(ee.listenerCount('test')).toBe(0);
+      expect(event.reply).toHaveBeenCalledTimes(3);
+      expect(event.reply.mock.lastCall![1]).toMatchObject({
+        id: 1,
+        result: {
+          type: 'stopped',
+        },
+      });
+    });
+  });
+
+  test('handles subscriptions using async generators', async () => {
+    const subscriptions = new Map();
+    const ee = new EventEmitter();
+    const t = trpc.initTRPC.create();
+    const testRouter = t.router({
+      testSubscription: t.procedure.subscription(async function* ({ signal }) {
+        for await (const _ of on(ee, 'test', { signal })) {
+          yield 'test response';
+        }
+      }),
+    });
+
+    const event = makeEvent({
+      reply: vi.fn(),
+      sender: {
+        isDestroyed: () => false,
+        on: () => {},
+      },
+    });
+
+    expect(ee.listenerCount('test')).toBe(0);
+
+    await handleIPCMessage({
+      createContext: async () => ({}),
+      message: {
+        method: 'request',
+        operation: {
+          context: {},
+          id: 1,
+          input: undefined,
+          path: 'testSubscription',
+          type: 'subscription',
+          signal: undefined,
+        },
+      },
+      internalId: '1-1:1',
+      subscriptions,
+      router: testRouter,
+      event,
+    });
+
+    expect(ee.listenerCount('test')).toBe(1);
+    expect(event.reply).toHaveBeenCalledTimes(1);
+    expect(event.reply.mock.lastCall![1]).toMatchObject({
+      id: 1,
+      result: {
+        type: 'started',
+      },
+    });
+
+    ee.emit('test');
+
+    await vi.waitFor(() => {
+      expect(event.reply).toHaveBeenCalledTimes(2);
+      expect(event.reply.mock.lastCall![1]).toMatchObject({
+        id: 1,
+        result: {
+          data: 'test response',
+        },
+      });
+    });
+
+    await handleIPCMessage({
+      createContext: async () => ({}),
+      message: {
+        method: 'subscription.stop',
+        id: 1,
+      },
+      internalId: '1-1:1',
+      subscriptions,
+      router: testRouter,
+      event,
+    });
+
+    await vi.waitFor(() => {
+      expect(ee.listenerCount('test')).toBe(0);
+      expect(event.reply).toHaveBeenCalledTimes(3);
+      expect(event.reply.mock.lastCall![1]).toMatchObject({
+        id: 1,
+        result: {
+          type: 'stopped',
+        },
+      });
     });
   });
 
@@ -159,13 +289,15 @@ describe('api', () => {
       },
     });
 
+    const ee = new EventEmitter();
+
     const t = trpc.initTRPC.create({
       transformer: {
         deserialize: (input: unknown) => {
           const serialized = (input as string).replace(/^serialized:/, '');
           return JSON.parse(serialized);
         },
-        serialize: (input) => {
+        serialize: input => {
           return `serialized:${JSON.stringify(input)}`;
         },
       },
@@ -173,7 +305,7 @@ describe('api', () => {
 
     const testRouter = t.router({
       testSubscription: t.procedure.subscription(() => {
-        return observable((emit) => {
+        return observable(emit => {
           function testResponse() {
             emit.next('test response');
           }
@@ -194,6 +326,7 @@ describe('api', () => {
           input: undefined,
           path: 'testSubscription',
           type: 'subscription',
+          signal: undefined,
         },
       },
       internalId: '1-1:1',
@@ -202,17 +335,25 @@ describe('api', () => {
       event,
     });
 
-    expect(event.reply).not.toHaveBeenCalled();
-
-    ee.emit('test');
-
-    expect(event.reply).toHaveBeenCalledOnce();
+    expect(event.reply).toHaveBeenCalledTimes(1);
     expect(event.reply.mock.lastCall![1]).toMatchObject({
       id: 1,
       result: {
-        type: 'data',
-        data: 'serialized:"test response"',
+        type: 'started',
       },
+    });
+
+    ee.emit('test');
+
+    await vi.waitFor(() => {
+      expect(event.reply).toHaveBeenCalledTimes(2);
+      expect(event.reply.mock.lastCall![1]).toMatchObject({
+        id: 1,
+        result: {
+          type: 'data',
+          data: 'serialized:"test response"',
+        },
+      });
     });
   });
 });

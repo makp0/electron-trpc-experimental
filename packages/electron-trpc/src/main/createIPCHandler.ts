@@ -1,5 +1,4 @@
 import type { AnyTRPCRouter, inferRouterContext } from '@trpc/server';
-import { Unsubscribable } from '@trpc/server/observable';
 import { ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainEvent } from 'electron';
 
@@ -20,7 +19,7 @@ const getInternalId = (event: IpcMainEvent, request: ETRPCRequest) => {
 
 class IPCHandler<TRouter extends AnyTRPCRouter> {
   #windows: BrowserWindow[] = [];
-  #subscriptions: Map<string, Unsubscribable> = new Map();
+  #subscriptions: Map<string, AbortController> = new Map();
 
   constructor({
     createContext,
@@ -57,14 +56,17 @@ class IPCHandler<TRouter extends AnyTRPCRouter> {
   }
 
   detachWindow(win: BrowserWindow, webContentsId?: number) {
-    debug('Detaching window', win.id);
+    this.#windows = this.#windows.filter(w => w !== win);
 
     if (win.isDestroyed() && webContentsId === undefined) {
-      throw new Error('webContentsId is required when calling detachWindow on a destroyed window');
+      throw new Error(
+        'webContentsId is required when calling detachWindow on a destroyed window',
+      );
     }
 
-    this.#windows = this.#windows.filter((w) => w !== win);
-    this.#cleanUpSubscriptions({ webContentsId: webContentsId ?? win.webContents.id });
+    this.#cleanUpSubscriptions({
+      webContentsId: webContentsId ?? win.webContents.id,
+    });
   }
 
   #cleanUpSubscriptions({
@@ -76,8 +78,7 @@ class IPCHandler<TRouter extends AnyTRPCRouter> {
   }) {
     for (const [key, sub] of this.#subscriptions.entries()) {
       if (key.startsWith(`${webContentsId}-${frameRoutingId ?? ''}`)) {
-        debug('Closing subscription', key);
-        sub.unsubscribe();
+        sub.abort();
         this.#subscriptions.delete(key);
       }
     }
@@ -86,13 +87,7 @@ class IPCHandler<TRouter extends AnyTRPCRouter> {
   #attachSubscriptionCleanupHandlers(win: BrowserWindow) {
     const webContentsId = win.webContents.id;
     win.webContents.on('did-start-navigation', ({ isSameDocument, frame }) => {
-      // Check if it's a hard navigation
       if (!isSameDocument) {
-        debug(
-          'Handling hard navigation event',
-          `webContentsId: ${webContentsId}`,
-          `frameRoutingId: ${frame.routingId}`
-        );
         this.#cleanUpSubscriptions({
           webContentsId: webContentsId,
           frameRoutingId: frame.routingId,
@@ -100,7 +95,6 @@ class IPCHandler<TRouter extends AnyTRPCRouter> {
       }
     });
     win.webContents.on('destroyed', () => {
-      debug('Handling webContents `destroyed` event');
       this.detachWindow(win, webContentsId);
     });
   }
@@ -111,7 +105,9 @@ export const createIPCHandler = <TRouter extends AnyTRPCRouter>({
   router,
   windows = [],
 }: {
-  createContext?: (opts: CreateContextOptions) => Promise<inferRouterContext<TRouter>>;
+  createContext?: (
+    opts: CreateContextOptions,
+  ) => Promise<inferRouterContext<TRouter>>;
   router: TRouter;
   windows?: Electron.BrowserWindow[];
 }) => {
