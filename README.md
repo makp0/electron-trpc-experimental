@@ -43,7 +43,6 @@ npm install electron-trpc-experimental
 2. **Explore the examples** in the [`examples/`](./examples/) directory:
    - [`basic-react`](./examples/basic-react/) - Basic React setup with TypeScript
    - [`basic-react-superjson`](./examples/basic-react-superjson/) - Using SuperJSON transformers
-   - [`basic-vanilla-esm`](./examples/basic-vanilla-esm/) - Vanilla JavaScript with ESM
 
 ## Documentation
 
