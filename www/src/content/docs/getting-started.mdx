@@ -22,21 +22,16 @@ export const InstallCommand = ({ manager, command }) => (
       <code>
         <span style={{ color: '#79b8ff' }}>{command}</span>{' '}
         <span style={{ color: '#9ecbff' }}>add</span>{' '}
-        <span style={{ color: '#9ecbff' }}>{DOCS_CONFIG.packageName}</span>
+        <span style={{ color: '#9ecbff' }}>electron-trpc-experimental</span>
       </code>
     </pre>
   </div>
 );
 
-export const packageName = DOCS_CONFIG.packageName;
-export const trpcDocsUrl = DOCS_CONFIG.externalLinks.trpcDocs;
-export const basicExampleUrl = DOCS_CONFIG.externalLinks.basicExampleUrl;
-export const electronContextIsolationUrl = DOCS_CONFIG.externalLinks.electronContextIsolation;
-export const electronPreloadScriptsUrl = DOCS_CONFIG.externalLinks.electronPreloadScripts;
-export const preloadImportPath = DOCS_CONFIG.importPaths.preload;
+export const examplesUrl = DOCS_CONFIG.externalLinks.examplesUrl;
 
 export const preloadCode = `
-import { exposeElectronTRPC } from '${DOCS_CONFIG.importPaths.preload}';
+import { exposeElectronTRPC } from 'electron-trpc-experimental/preload';
 
 process.once('loaded', async () => {
 exposeElectronTRPC();
@@ -44,7 +39,7 @@ exposeElectronTRPC();
 `.trim();
 
 export const mainCode = `import { app } from 'electron';
-import { createIPCHandler } from '${DOCS_CONFIG.importPaths.main}';
+import { createIPCHandler } from 'electron-trpc-experimental/main';
 import { router } from './api';
 
 app.on('ready', () => {
@@ -60,7 +55,7 @@ createIPCHandler({ router, windows: [win] });
 
 export const rendererCode = `
 import { createTRPCProxyClient } from '@trpc/client';
-import { ipcLink } from '${DOCS_CONFIG.importPaths.renderer}';
+import { ipcLink } from 'electron-trpc-experimental/renderer';
 
 export const client = createTRPCProxyClient({
   links: [ipcLink()],
@@ -91,7 +86,7 @@ export const router = t.router({
 
 export const rendererWithTransformerCode = `
 import { createTRPCProxyClient } from '@trpc/client';
-import { ipcLink } from '${DOCS_CONFIG.importPaths.renderer}';
+import { ipcLink } from 'electron-trpc-experimental/renderer';
 import superjson from 'superjson';
 
 export const client = createTRPCProxyClient({
@@ -101,7 +96,7 @@ export const client = createTRPCProxyClient({
 
 ## Installation
 
-Follow installation instructions for [trpc](https://trpc.io/docs) to build your router and client of choice.
+Follow installation instructions for [trpc](https://trpc.io/docs/quickstart#installation) to build your router and client of choice.
 
 <InstallCommand manager="pnpm" command="pnpm" />
 
@@ -111,13 +106,13 @@ Follow installation instructions for [trpc](https://trpc.io/docs) to build your 
 
 #### TypeScript
 
-It's worth noting that you'll need to figure out how to get TypeScript working on both the main process and render process client code. For one example of how to do this with a good developer experience (minimal configuration, fast bundling, client hot-reloading) see our [basic example](https://github.com/makp0/electron-trpc/tree/main/examples/basic-react).
+It's worth noting that you'll need to figure out how to get TypeScript working on both the main process and render process client code. For one example of how to do this with a good developer experience (minimal configuration, fast bundling, client hot-reloading) see our <a href={examplesUrl}>basic examples</a>.
 
 ## Code
 
 ### Preload
 
-`electron-trpc-experimental` depends on Electron's [Context Isolation](https://www.electronjs.org/docs/tutorial/context-isolation) feature, and exposes the electron-trpc IPC channel to render processes using a [preload file](https://www.electronjs.org/docs/api/browser-window#new-browserwindowoptions).
+`electron-trpc-experimental` depends on Electron's [Context Isolation](https://www.electronjs.org/docs/latest/tutorial/context-isolation) feature, and exposes the electron-trpc IPC channel to render processes using a [preload file](https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts).
 
 Some familiarization with these concepts can be helpful in case of unexpected issues during setup.
 
@@ -176,4 +171,4 @@ Configure your tRPC client to use the same transformer:
 - **Popular transformers**: [`superjson`](https://github.com/blitz-js/superjson) is a popular choice that supports Dates, RegExp, Map, Set, BigInt, and more.
 - **Custom transformers**: You can also create custom transformers following the [tRPC transformer documentation](https://trpc.io/docs/data-transformers).
 
-For a complete working example with transformers, see our [superjson example](https://github.com/makp0/electron-trpc-experimental/tree/main/examples/basic-react-superjson).
+For a complete working example with transformers, see our <a href={examplesUrl + "/basic-react-superjson"}>superjson example</a> .

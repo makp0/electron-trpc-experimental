@@ -13,10 +13,6 @@ const BASE_PATH = `/${REPO_NAME}`;
 const PAGES_PATH = `${SITE_BASE_URL}${BASE_PATH}`;
 
 export const DOCS_CONFIG = {
-  // Package information
-  packageName: packageJson.name,
-  homepage: packageJson.homepage,
-
   // Repository information
   repositoryUrl: REPO_BASE_URL,
 
@@ -31,19 +27,8 @@ export const DOCS_CONFIG = {
   // Version information
   currentVersion: packageJson.version,
 
-  // Import paths
-  importPaths: {
-    main: `${packageJson.name}/main`,
-    preload: `${packageJson.name}/preload`,
-    renderer: `${packageJson.name}/renderer`,
-  },
-
   // External links
   externalLinks: {
-    trpcDocs: 'https://trpc.io/docs/quickstart#installation',
-    electronContextIsolation: 'https://www.electronjs.org/docs/latest/tutorial/context-isolation',
-    electronPreloadScripts: 'https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts',
-    examplesUrl: `${REPO_BASE_URL}/tree/main/examples/`,
-    basicExampleUrl: `${REPO_BASE_URL}/tree/main/examples/basic`,
+    examplesUrl: `${REPO_BASE_URL}/tree/main/examples`,
   },
 } as const;
