@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.1.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "jsonnull/electron-trpc" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "makp0/electron-trpc-experimental" }],
   "commit": false,
   "fixed": [],
   "linked": [],
