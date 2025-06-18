@@ -69,7 +69,7 @@
     "superjson": "^2.2.2",
     "vite": "^6.3.5",
     "vite-plugin-commonjs-externals": "^0.1.4",
-    "vitest": "^1.6.1",
+    "vitest": "^3.2.4",
     "zod": "^3.25.56"
   },
   "peerDependencies": {
