@@ -1,6 +1,6 @@
 {
   "name": "examples/basic-react",
-  "version": "0.0.20-alpha.0",
+  "version": "0.0.20-alpha.1",
   "private": true,
   "main": "dist-electron/index.js",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "@trpc/react-query": "11.3.1",
     "@trpc/server": "11.3.1",
     "electron": "29.3.2",
-    "electron-trpc-experimental": "1.0.0-alpha.0",
+    "electron-trpc-experimental": "1.0.0-alpha.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zod": "^3.25.56"

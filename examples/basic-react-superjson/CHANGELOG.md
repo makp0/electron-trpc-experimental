@@ -1,5 +1,12 @@
 # examples/basic
 
+## 0.0.20-alpha.1
+
+### Patch Changes
+
+- Updated dependencies [[`d42779f`](https://github.com/makp0/electron-trpc-experimental/commit/d42779fd02e092305cf78d6838273f5601e80a4d)]:
+  - electron-trpc-experimental@1.0.0-alpha.1
+
 ## 0.0.20-alpha.0
 
 ### Patch Changes
