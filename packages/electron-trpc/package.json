@@ -1,7 +1,7 @@
 {
   "name": "electron-trpc-experimental",
   "description": "Electron support for tRPC",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/makp0/electron-trpc-experimental.git"

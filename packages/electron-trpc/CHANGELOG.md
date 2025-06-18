@@ -1,5 +1,11 @@
 # electron-trpc
 
+## 1.0.0-alpha.1
+
+### Minor Changes
+
+- [#9](https://github.com/makp0/electron-trpc-experimental/pull/9) [`d42779f`](https://github.com/makp0/electron-trpc-experimental/commit/d42779fd02e092305cf78d6838273f5601e80a4d) Thanks [@makp0](https://github.com/makp0)! - bump trpc version to 11.4.2
+
 ## 1.0.0-alpha.0
 
 ### Major Changes

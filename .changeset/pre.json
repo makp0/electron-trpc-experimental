@@ -6,7 +6,11 @@
     "examples/basic-react-superjson": "0.0.16",
     "examples/basic-vanilla-esm": "0.0.16",
     "electron-trpc": "0.6.1",
-    "www": "0.0.1"
+    "www": "0.0.1",
+    "electron-trpc-experimental": "1.0.0-alpha.0"
   },
-  "changesets": ["seven-carrots-live"]
+  "changesets": [
+    "chilled-swans-beam",
+    "seven-carrots-live"
+  ]
 }
