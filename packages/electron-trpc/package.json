@@ -59,7 +59,7 @@
     "@trpc/client": "^11.4.2",
     "@trpc/server": "^11.4.2",
     "@types/debug": "^4.1.12",
-    "@types/node": "^20.19.0",
+    "@types/node": "^24.0.7",
     "@vitest/coverage-v8": "^1.6.1",
     "builtin-modules": "^4.0.0",
     "dts-bundle-generator": "9.5.1",
